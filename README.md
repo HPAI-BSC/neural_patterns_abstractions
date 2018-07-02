@@ -16,6 +16,8 @@ We do several steps to generate the necesary data for this analysis. For this re
 file: step-1/data/imagenet2012_val_synset_codes.txt
 
 **Output**:The partitions of all the synsets with more than 1000 images.
+
 For each synset it will create a folder in data, and inside this folder it will write the partition files: 
-  step-1/data/synset/synset_imgs.txt
-  step-1/data/synset/no_synset_imgs.txt
+
+-  step-1/data/synset/synset_imgs.txt
+-  step-1/data/synset/no_synset_imgs.txt
