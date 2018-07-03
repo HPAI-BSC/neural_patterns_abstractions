@@ -183,10 +183,6 @@ def generate_partition(goal_synset):
 				no_ss = np.append(no_ss, l.strip().split()[0])
 
 	if len(ss) >= 1000:
-		try:
-			os.mkdir('../data/' + goal_synset)
-		except:
-			pass
 		# np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.txt' , ss,  fmt="%s")
 		# np.savetxt('../data/all_ss_partitions' + '/no_synset/no_'+ img_ids_to_text([goal_synset])[0] + '_images.txt', no_ss, fmt="%s")
 		np.savez('../data/all_ss_partitions_npz' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.npz',
