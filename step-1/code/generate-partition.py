@@ -1,5 +1,5 @@
 """
-In this code we generate the partition of all the synsets with at least 1000 images.
+In this code we generate the partition of all the synsets with more than 1000 images.
 
 For faster calculations it will generate the next auxiliar files:
 	all_ss : The set of synsets that appear in the dataset.
