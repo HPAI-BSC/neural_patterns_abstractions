@@ -24,6 +24,8 @@ For each synset it will create to files in data:
 
 
 ### Second Step
+This code is in:  /gpfs/projects/bsc28/semantic_transfer_scripts/code
+
 First we generate a tiramisu folder. TODO: explain this step. 
 
 **Input**: The files generated on the step 1 of the folder data/all_synset_partitions_npz/synset/ . There are 55 files. 
