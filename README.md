@@ -17,7 +17,22 @@ file: step-1/data/imagenet2012_val_synset_codes.txt
 
 **Output**:The partitions of all the synsets with more than 1000 images.
 
-For each synset it will create a folder in data, and inside this folder it will write the partition files: 
+For each synset it will create to files in data: 
 
--  step-1/data/synset/synset_imgs.txt
--  step-1/data/synset/no_synset_imgs.txt
+-  data/all_synset_partitions_npz/synset/name_imgs.npz
+-  data/all_synset_partitions_npz/no_synset/no_name_imgs.npz
+
+
+### Second Step
+First we generate a tiramisu folder. TODO: explain this step. 
+
+**Input**: The files generated on the step 1 of the folder data/all_synset_partitions_npz/synset/ . There are 55 files. 
+
+
+**Output**:The folders with the symbolic links on tiramisu_nicename/imgs for every one of the selected synsets. 
+
+The structure of this will be supposing the synset is dog: 
+
+- tiramisu_nicename/imgs/dog/train/dog/images0008.JPEG
+
+- tiramisu_nicename/imgs/dog/train/no_dog/images00058.JPEG
