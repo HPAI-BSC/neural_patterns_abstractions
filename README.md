@@ -10,6 +10,7 @@ We use the next resources:
 We do several steps to generate the necesary data for this analysis. For this reason the repository is divided in one folder per each step. 
 
 ### First Step
+For this step you need a python with nltk installed. 
 
 **Input**: A file with all the names of the images and its correspondent class ( writed as an imagenet synset). 
 
