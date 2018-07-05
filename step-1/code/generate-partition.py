@@ -12,7 +12,6 @@ from nltk.corpus import wordnet as wn
 import numpy as np
 from datetime import timedelta
 import time
-import os
 import functools as fu
 
 
@@ -27,7 +26,6 @@ def get_wn_ss(imagenet_id):
 	:param imagenet_id:
 	:return:
 	"""
-	from nltk.corpus import wordnet as wn
 	return wn.of2ss(imagenet_id[1:] + '-' + imagenet_id[0])
 
 
@@ -48,7 +46,6 @@ def get_in_id(wordnet_ss):
 	:param wordnet_ss:
 	:return: imagenet id (string)
 	"""
-	from nltk.corpus import wordnet as wn
 	wn_id = wn.ss2of(wordnet_ss)
 	return wn_id[-1] + wn_id[:8]
 
@@ -164,7 +161,7 @@ def index_and_hyponims_from_label(ss):
 	return index
 
 
-def generate_partition(goal_synset):
+def generate_partition(goal_synset,format='npz'):
 	"""
 	This function makes the partition of the images with the criteria if is goal_synset (or hyponym) or not.
 	And writes two files with this partion in ../data/goal_synset/ if there are more than 1000 images of this synset.
@@ -183,8 +180,9 @@ def generate_partition(goal_synset):
 				no_ss = np.append(no_ss, l.strip().split()[0])
 
 	if len(ss) >= 1000:
-		# np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.txt' , ss,  fmt="%s")
-		# np.savetxt('../data/all_ss_partitions' + '/no_synset/no_'+ img_ids_to_text([goal_synset])[0] + '_images.txt', no_ss, fmt="%s")
+		if format== 'txt':
+			np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.txt' , ss,  fmt="%s")
+			np.savetxt('../data/all_ss_partitions' + '/no_synset/no_'+ img_ids_to_text([goal_synset])[0] + '_images.txt', no_ss, fmt="%s")
 		np.savez('../data/all_ss_partitions_npz' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.npz',
 		         name=img_ids_to_text([goal_synset])[0], code=goal_synset, imgs=ss )
 		np.savez('../data/all_ss_partitions_npz' + '/no_synset/no_' + img_ids_to_text([goal_synset])[0] + '_images.npz',
@@ -196,7 +194,7 @@ def generate_partition(goal_synset):
 def interest_synsets():
 	"""
 	This function calculates how many synsets have more than 1000 images and writes them in a file.
-	(54)
+	(55)
 	:return:
 	"""
 	counter = 0

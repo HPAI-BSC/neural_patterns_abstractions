@@ -39,3 +39,14 @@ The structure of this will be supposing the synset is dog:
 - tiramisu_nicename/imgs/dog/train/dog/images0008.JPEG
 
 - tiramisu_nicename/imgs/dog/train/no_dog/images00058.JPEG
+
+
+### Third Step
+This code is in:  /gpfs/projects/bsc28/tiramisu_semantic_transfer
+
+The main objective of this step is to create all the embeddings for the selected embeddings. To do so, we will use the tiramisu3.0 code on the minotauro.
+
+**Input**:  The folders with the symbolic links on tiramisu_nicename/imgs for every one of the selected synsets. 
+
+
+**Output**: One embedding per synset selected. 

@@ -12,6 +12,8 @@ data_path = '/gpfs/projects/bsc28/DATASETS/Imagenet_val50k/ILSVRC_12_val'
 imgs = np.load('/gpfs/projects/bsc28/DATASETS/Imagenet_val50k/imagenet2012_val_synset_codes_as_array.npz')['imgs']
 synsets = np.load('/gpfs/projects/bsc28/DATASETS/Imagenet_val50k/imagenet2012_val_synset_codes_as_array.npz')['ss']
 
+image_file_paths = '/gpfs/projects/bsc28/tiramisu_semantic_transfer/synset_partitions/'
+
 
 def create_link(synset_data):
 	_path = base_imgs_path + str(synset_data['name']) + '/train/'
@@ -61,7 +63,6 @@ def create_folders(image_file_paths):
 
 
 def main():
-	image_file_paths = '/gpfs/projects/bsc28/tiramisu_semantic_transfer/synset_partitions/'
 	create_folders(image_file_paths)
 
 

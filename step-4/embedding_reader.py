@@ -1,13 +1,13 @@
 import sys
-sys.path.append('/gpfs/projects/bsc28/bsc28535/tiramisu_3.0_dario/tiramisu_source')
+sys.path.append('/gpfs/projects/bsc28/tiramisu_semantic_transfer/')
 import numpy as np
 from tiramisu.tensorflow.core.backend import read_embeddings
 
-embeddings = ['1242265','1242407','1242753']
-labels = ['live','dog','mammal']
+embeddings = ['1284246']
+labels = ['dog']
 
 for emb,lab in zip(embeddings,labels):
-    (results, img_paths, labels, layers_dict) = read_embeddings(path_prefix="/gpfs/projects/bsc28/bsc28535/tiramisu_3.0_dario/embeddings/"+emb+"/train/embeddings")
+    (results, img_paths, labels, layers_dict) = read_embeddings(path_prefix="/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/1284246/train/embeddings_0")
     print '-----------------'
     print 'Going in with',emb,' ',lab
     dmp = np.copy(results == 1)
