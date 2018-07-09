@@ -1,138 +1,131 @@
-import sys
-sys.path.append('/gpfs/projects/bsc28/tiramisu_semantic_transfer/')
 import numpy as np
 from tiramisu.tensorflow.core.backend import read_embeddings
+import os
 
-embeddings = ['1284246']
-labels = ['dog']
+def find_layer_of_feature(feature, embedding):
+	"""
+	This function find the layer correspondent to the given feature in a certain embedding.
+	It returns the layer name of the feature.
+	:param feature: a feature : int
+	:param embedding: a dictionary with keys: ['embeddings', 'image_paths', 'image_labels', 'feature_scheme']
+	:return:
+	"""
+	layers = embedding['feature_scheme'][()] ## Ordered dict.
+	layer = None
+	for i in layers.values():
+		if feature in range(i[0], i[1]):
+			layer = i
+			# print(feature, i)
+	try:
+		layer_name =  list(layers.keys())[list(layers.values()).index(layer)]
+		return layer_name
+	except:
+		print('Feature not in range')
+	return None
 
-for emb,lab in zip(embeddings,labels):
-    (results, img_paths, labels, layers_dict) = read_embeddings(path_prefix="/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/1284246/train/embeddings_0")
-    print '-----------------'
-    print 'Going in with',emb,' ',lab
-    dmp = np.copy(results == 1)
-    #Currently exploring only the positives
-    #dmn = np.copy(results == -1)
-    #dm = np.concatenate((dmp , dmn), axis=1)
-
-    #Get subset by synset
-    pos_emb = dmp[[x==lab for x in labels]]
-    neg_emb = dmp[[x!=lab for x in labels]]
-    print 'Size of '+lab+' embedding',pos_emb.shape
-    print 'Size of complementary embedding',neg_emb.shape
-
-    #Compute distribution per feature.
-    pos_feature_counts = []
-    neg_feature_counts = []
-    pos_full_hits = 0
-    pos_full_misses = 0
-    neg_full_hits = 0
-    neg_full_misses = 0
-    pos_features_maj_ones = []
-    neg_features_maj_ones = []
-    counter = 0
-    for p,n in zip(pos_emb.T,neg_emb.T):
-        p_unique, p_counts = np.unique(p, return_counts=True)
-        n_unique, n_counts = np.unique(n, return_counts=True)
-        #If there is ony one value
-        if len(p_counts)==1:
-            #its a full hit!
-            if p_unique[0] == True:
-                pos_full_hits+=1
-                pos_feature_counts.append(p_counts)
-            #Full miss
-            else:
-                pos_full_misses+=1
-                pos_feature_counts.append(0)
-        #if there are two values, get the second which corresponds to True
-        else:
-            if p_counts[1]>p_counts[0]:
-                pos_features_maj_ones.append(counter)
-            try:
-                pos_feature_counts.append(p_counts[1])
-            except IndexError:
-                print 'An error occurred when processing counts',p_counts
-        #If there is ony one value
-        if len(n_counts)==1:
-            #its a full hit!
-            if n_unique[0] == True:
-                neg_full_hits+=1
-                neg_feature_counts.append(n_counts)
-            #Full miss
-            else:
-                neg_full_misses+=1
-                neg_feature_counts.append(0)
-        #if there are two values, get the second which corresponds to True
-        else:
-            if n_counts[1]>n_counts[0]:
-                neg_features_maj_ones.append(counter)
-            try:
-                neg_feature_counts.append(n_counts[1])
-            except IndexError:
-                print 'An error occurred when processing counts',n_counts
-        counter+=1
-    print lab+' Positive full hits:',pos_full_hits, ' full misses:',pos_full_misses
-    print lab+' Negative full hits:',neg_full_hits, ' and full misses:',neg_full_misses
-    #print 'Features with majority of ones:',features_maj_ones
-
-    #Store
-    #np.save(open('liv_embedding_feature_counts.npy','w'),feature_counts)
-    #Plot
-    import matplotlib
-    matplotlib.use('pdf')
-    import matplotlib.mlab as mlab
-    import matplotlib.pyplot as plt
-    #Get only the positive cases. its simetrical to 50K
-    n, bins, patches = plt.hist(pos_feature_counts, 500, facecolor='green', alpha=0.75)
-    plt.axvline(pos_emb.shape[0]/2, color='k', linestyle='solid')
-    plt.savefig('positive_features_distributions_'+lab+'.pdf')
-    plt.clf()
-    n, bins, patches = plt.hist(neg_feature_counts, 500, facecolor='green', alpha=0.75)
-    plt.axvline(neg_emb.shape[0]/2, color='k', linestyle='solid')
-    plt.savefig('negative_features_distributions_'+lab+'.pdf')
-    plt.clf()
-
-    pos_f = open(lab+'_pos_features_maj_ones.txt','w')
-    for item in pos_features_maj_ones:
-      pos_f.write("%s\n" % item)
-    pos_f.close()
-    neg_f = open(lab+'_neg_features_maj_ones.txt','w')
-    for item in neg_features_maj_ones:
-      neg_f.write("%s\n" % item)
-    neg_f.close()
+def extract_synset_name(path):
+	"""
+	/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/1284246/
+	:param path:
+	:return:
+	"""
+	_path = path + 'results.txt'
+	synset_name = ''
+	with open(_path, 'r') as f:
+		for l in f:
+			if 'dataset' in l:
+				synset_name = l.strip(' ')[1]
+	return synset_name
 
 
-###Load most frequent feature values separately
-#most_freq_vals_dead = []
-#most_freq_vals_live = []
-#for d,a in zip(dead_emb.T,live_emb.T):
-#    most_freq_vals_dead.append(np.argmax(np.bincount(d)))
-#    most_freq_vals_live.append(np.argmax(np.bincount(a)))
-#print 'For dog hyponyms, the number of features with more frequent 1s are:',np.bincount(most_freq_vals_dead)[1]
-#print 'For nodog hyponyms, the number of features with more frequent 1s are:',np.bincount(most_freq_vals_live)[1]
-#
-##Get indices of features with 1
-#dead_indices = np.argwhere(most_freq_vals_dead)
-#live_indices = np.argwhere(most_freq_vals_live)
-#print live_indices
-##Get the count by layer
-#dead_layer_counts = {}
-#live_layer_counts = {}
-#for d in dead_indices:
-#    for k,v in layers_dict.iteritems():
-#        if v[0] < d < v[1]:
-#            if k in dead_layer_counts.keys():
-#                dead_layer_counts[k]+=1
-#            else:
-#                dead_layer_counts[k]=1
-#for l in live_indices:
-#    for k,v in layers_dict.iteritems():
-#        if v[0] < l < v[1]:
-#            if k in live_layer_counts.keys():
-#                live_layer_counts[k]+=1
-#            else:
-#                live_layer_counts[k]=1
-#print live_layer_counts
+def read_embedding( job_label,embedding_path,data_path='/gpfs/projects/bsc28/semantic_transfer_scripts/data/', delete=False):
+	"""
+	embedding_path expecgted:  returns /gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/1284246
+	This function loads the embedding correspondent to the synset synset_name on the given embedding_path and extracts the
+	features that have majority of images with value 1.
+	:param synset_name:
+	:param embedding_path:
+	:return:
+	"""
+	synset_name = extract_synset_name(embedding_path)
+	print('-----------------')
+
+	print('Going in with', job_label, ' ', synset_name)
+
+	embedding_path = embedding_path + '/train/embeddings'
+	(results, img_paths, labels, layers_dict) = read_embeddings(path_prefix=embedding_path)
+
+	dmp = np.copy(results == 1)
+
+	# Get subset by synset
+	pos_emb = dmp[[x == synset_name for x in labels]]
+	neg_emb = dmp[[x != synset_name for x in labels]]
+	print('Size of ' + synset_name + ' embedding', pos_emb.shape)
+	print('Size of complementary embedding', neg_emb.shape)
+
+	# Compute distribution per feature.
+	pos_feature_counts = []
+	neg_feature_counts = []
+	pos_features_maj_ones = []
+	neg_features_maj_ones = []
+	counter = 0
+	for p, n in zip(pos_emb.T, neg_emb.T):
+		p_unique, p_counts = np.unique(p, return_counts=True)
+		n_unique, n_counts = np.unique(n, return_counts=True)
+		# If there is ony one value
+		if len(p_counts) == 1:
+			if p_unique[0] == True:
+				pos_feature_counts.append(p_counts)
+			else:
+				pos_feature_counts.append(0)
+		# if there are two values, get the second which corresponds to True
+		else:
+			if p_counts[1] > p_counts[0]:
+				pos_features_maj_ones.append(counter)
+			try:
+				pos_feature_counts.append(p_counts[1])
+			except IndexError:
+				print('An error occurred when processing counts', p_counts)
+		# If there is ony one value
+		if len(n_counts) == 1:
+			# its a full hit!
+			if n_unique[0] == True:
+				neg_feature_counts.append(n_counts)
+			# Full miss
+			else:
+				neg_feature_counts.append(0)
+		# if there are two values, get the second which corresponds to True
+		else:
+			if n_counts[1] > n_counts[0]:
+				neg_features_maj_ones.append(counter)
+			try:
+				neg_feature_counts.append(n_counts[1])
+			except IndexError:
+				print('An error occurred when processing counts', n_counts)
+
+		counter += 1
+
+	path_pos_maj_ones = data_path + synset_name + '_pos_features_maj_ones.npz'
+	path_neg_maj_ones = data_path + synset_name + '_neg_features_maj_ones.npz'
+
+	np.savez(path_pos_maj_ones, pos_features=pos_features_maj_ones)
+	np.savez(path_neg_maj_ones, pos_features=neg_features_maj_ones)
+
+	####################
+	# Delete the embedding once we have the data:
+	if delete:
+		import shutil
+		shutil.rmtree(embedding_path)
+
+def main():
+	location =  '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
+	folders =  next(os.walk('.'))[1]
+
+	for job_label in folders:
+		_path = location + job_label
+		read_embedding(job_label,_path)
 
 
-#NEXT: sort layers. find subsets for hyponym embedding extraction (vs mammal?). look for relations between features of same synset (weights between layers?)
+
+if __name__ == "__main__":
+	main()
