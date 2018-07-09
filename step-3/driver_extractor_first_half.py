@@ -1,6 +1,7 @@
 from __future__ import print_function
 
 from embeddings_processors.example_extract_embeddings import launcher
+from tiramisu.tensorflow.core.backend import read_embeddings
 
 
 def test(model_name, dataset, embedding_types):
@@ -16,6 +17,7 @@ def test(model_name, dataset, embedding_types):
 		print("Dataset \"{}\" is not available".format(dataset))
 		return -1
 
+	layers = [l[0] for l in layers]
 	job_id = launcher.run_experiment(
 		model_name=model_name,
 		dataset_name=dataset,
@@ -43,16 +45,14 @@ def main():
 	print("Available datasets:", datasets)
 
 
-	datasets = ['food', 'structure', 'entity', 'animal', 'aquatic_bird', 'organism', 'solid', 'hunting_dog',
+	#  First half of the datasets
+	datasets = [ 'structure', 'entity', 'animal', 'aquatic_bird', 'organism', 'solid', 'hunting_dog',
 	            'equipment', 'consumer_goods', 'mammal', 'arthropod', 'chordate', 'living_thing', 'covering',
 	            'carnivore', 'craft', 'invertebrate', 'vertebrate', 'self-propelled_vehicle', 'clothing', 'canine',
-	            'terrier', 'insect', 'implement', 'dog', 'motor_vehicle', 'physical_entity', 'vehicle', 'vessel',
-	            'reptile', 'musical_instrument', 'furniture', 'commodity', 'wheeled_vehicle', 'artifact', 'conveyance',
-	            'domestic_animal', 'primate', 'working_dog', 'object', 'garment', 'bird', 'whole', 'instrument',
-	            'substance', 'matter', 'furnishing', 'container', 'instrumentality', 'diapsid', 'produce',
-	            'protective_covering', 'device', 'placental']
+	            'terrier', 'insect', 'implement', 'dog', 'motor_vehicle', 'physical_entity', 'vehicle', 'vessel']
 
 	model_name = "vgg16_imagenet"
+
 	for dataset in datasets:
 		ret = test(model_name, dataset, "FN")
 		if None in ret:
@@ -60,6 +60,7 @@ def main():
 			return
 
 		embeddings_shape, duration, location = ret
+		# read_embedding(dataset, location)
 
 		print("Time spent extracting", duration, " (seconds)")
 		print("Shapes:", embeddings_shape)
