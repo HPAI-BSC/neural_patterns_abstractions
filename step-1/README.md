@@ -29,13 +29,13 @@ Each file containing a dictionary (we will call it *potato* to simplify) such th
 
 The synsets selected using the imagenet_2012 validation dataset are: 
 'food', 'structure', 'entity', 'animal', 'aquatic_bird', 'organism', 'solid', 'hunting_dog',
-	            'equipment', 'consumer_goods', 'mammal', 'arthropod', 'chordate', 'living_thing', 'covering',
-	            'carnivore', 'craft', 'invertebrate', 'vertebrate', 'self-propelled_vehicle', 'clothing', 'canine',
-	            'terrier', 'insect', 'implement', 'dog', 'motor_vehicle', 'physical_entity', 'vehicle', 'vessel',
-	            'reptile', 'musical_instrument', 'furniture', 'commodity', 'wheeled_vehicle', 'artifact', 'conveyance',
-	            'domestic_animal', 'primate', 'working_dog', 'object', 'garment', 'bird', 'whole', 'instrument',
-	            'substance', 'matter', 'furnishing', 'container', 'instrumentality', 'diapsid', 'produce',
-	            'protective_covering', 'device', 'placental'
+'equipment', 'consumer_goods', 'mammal', 'arthropod', 'chordate', 'living_thing', 'covering',
+'carnivore', 'craft', 'invertebrate', 'vertebrate', 'self-propelled_vehicle', 'clothing', 'canine',
+'terrier', 'insect', 'implement', 'dog', 'motor_vehicle', 'physical_entity', 'vehicle', 'vessel',
+'reptile', 'musical_instrument', 'furniture', 'commodity', 'wheeled_vehicle', 'artifact', 'conveyance',
+'domestic_animal', 'primate', 'working_dog', 'object', 'garment', 'bird', 'whole', 'instrument',
+'substance', 'matter', 'furnishing', 'container', 'instrumentality', 'diapsid', 'produce',
+'protective_covering', 'device', 'placental'
 	            
 	            
 #### Example of use: 

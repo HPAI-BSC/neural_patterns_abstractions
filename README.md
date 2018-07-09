@@ -4,8 +4,7 @@ In this repository we will perform an analysis about the relation between the em
 
 We use the next resources: 
 - The Imagenet 2012 validation dataset (1000 clases, 50k images)
-- The Full Network Embedding
-- Tiramisu 
+- The Full Network Embedding implemented with Tiramisu.
 
 We do several steps to generate the necesary data for this analysis. For this reason the repository is divided in one folder per each step. 
 
@@ -42,9 +41,10 @@ The structure of this will be supposing the synset is dog:
 
 
 ### Third Step
-This code is in:  /gpfs/projects/bsc28/tiramisu_semantic_transfer
+This code is in:  /gpfs/projects/bsc28/tiramisu\_semantic\_transfer
 
-The main objective of this step is to create all the embeddings for the selected embeddings. To do so, we will use the tiramisu3.0 code on the minotauro.
+The main objective of this step is to create all the embeddings for the selected embeddings and using them, extract the more representatives features for each of the synsets selected.
+To do so, we will use the tiramisu3.0 code on the minotauro.
 
 **Input**:  The folders with the symbolic links on tiramisu_nicename/imgs for every one of the selected synsets. 
 
