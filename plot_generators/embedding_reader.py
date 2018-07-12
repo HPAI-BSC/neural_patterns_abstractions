@@ -160,6 +160,10 @@ def plot_synset_layer_distribution(pos_feature_counts, size, name):
 
 """
 This code generates plots showing the distribution of "synset features" through layers. For each synset two plots are generated. Each plot shows the distribution of features per layer, as the threshold of minimum activated images varies. One plot shows the data in absolute number of features, and the other normalizing by the number of features in the layer. Plots are stored in "../plots"
+REQUIRES: 
+    -Access to the results of step 3 (var location).
+    -Access to tiramisu methods (see top of the file)
+    -The embeddings to be from vgg16 (see top of the file, var layers)
 """
 def main():
         location =  '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
