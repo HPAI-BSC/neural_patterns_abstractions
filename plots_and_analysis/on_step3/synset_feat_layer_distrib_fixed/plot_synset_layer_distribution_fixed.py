@@ -134,27 +134,27 @@ def plot_synset_layer_distribution(pos_feature_counts, size, name):
         data_points_by_layer_norm[idx_l] = val
     #plot histogram
     plt.plot(range(0,len(layers.keys())), data_points_by_layer)
-    plt.xticks(np.arange(len(layers.keys())), (layers.keys()), rotation=70, fontsize=8)
-    plt.savefig('../plots/layer_distribution_pos_feats_fixed_'+name+'.pdf')
+    plt.xticks(np.arange(len(layers.keys())), (layers.keys()), rotation=70, fontsize=6)
+    plt.savefig('plots/layer_distribution_pos_feats_fixed_'+name+'.pdf')
     #plot histogram normalized
     plt.cla()
     plt.plot(range(0,len(layers.keys())), data_points_by_layer_norm)
-    plt.xticks(np.arange(len(layers.keys())), (layers.keys()), rotation=70, fontsize=8)
-    plt.savefig('../plots/layer_distribution_pos_feats_fixed_norm_'+name+'.pdf')
+    plt.xticks(np.arange(len(layers.keys())), (layers.keys()), rotation=70, fontsize=6)
+    plt.savefig('plots/layer_distribution_pos_feats_fixed_norm_'+name+'.pdf')
     
 
 """
 This code generates plots showing the distribution of "synset features" through layers. For each synset two plots are generated. Each plot shows the distribution of features per layer, as the threshold of minimum activated images varies. One plot shows the data in absolute number of features, and the other normalizing by the number of features in the layer. Plots are stored in "../plots"
 REQUIRES: 
-    -Access to the results of step 3 (var location).
+    -Access to the results of step 3 (var step3_data_location).
     -Access to tiramisu methods (see top of the file)
     -The embeddings to be from vgg16 (see top of the file, var layers)
 """
 def main():
-        location =  '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
-        folders =  next(os.walk(location))[1]
+        step3_data_location =  '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
+        folders =  next(os.walk(step3_data_location))[1]
         for job_label in folders[2:]:
-                _path = location + job_label
+                _path = step3_data_location + job_label
                 try:
                     name = extract_synset_name(_path)
                     pos_feature_counts, size = read_embedding(job_label,_path)

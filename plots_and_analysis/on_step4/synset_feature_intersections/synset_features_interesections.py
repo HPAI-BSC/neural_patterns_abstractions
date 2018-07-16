@@ -5,16 +5,16 @@ import itertools
 
 def main():
     #Path to data
-    pos_feats_path = '/gpfs/projects/bsc28/semantic_transfer_scripts/data'
+    step4_path = '/gpfs/projects/bsc28/semantic_transfer_scripts/data'
     #Initialize data structure
     pos_feats = {}
     #Load data
-    for f in os.listdir(pos_feats_path):
+    for f in os.listdir(step4_path):
         #Skip negative ones
         if 'neg' in f:
             continue
         #Read the data
-        x = np.load(os.path.join(pos_feats_path,f))['pos_features']
+        x = np.load(os.path.join(step4_path,f))['pos_features']
         name = f.split('pos')[0][:-1]
         pos_feats[name] = x
     #Compute intersections
@@ -34,7 +34,7 @@ def main():
        
     #Sort data structure
     sorted_intersects = sorted(intersects, key=lambda x: x[1], reverse=True)
-    with open('../plots/synset_feature_interesections.txt','w') as f:
+    with open('data/synset_feature_interesections.txt','w') as f:
         for x in sorted_intersects:
             f.write(x[0][0]+' '+x[0][1]+' '+str(x[1])+'\n')
 

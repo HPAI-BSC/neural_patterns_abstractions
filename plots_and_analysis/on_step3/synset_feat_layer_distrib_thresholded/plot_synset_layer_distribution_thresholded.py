@@ -145,7 +145,7 @@ def plot_synset_layer_distribution(pos_feature_counts, size, name):
         plt.plot(thresholds,d, '-'+types[counter%3], label=l, color=palette(counter))
         counter+=20
     plt.legend(loc='upper right')
-    plt.savefig('../plots/layer_distribution_pos_feats_'+name+'.pdf')
+    plt.savefig('plots/layer_distribution_pos_feats_'+name+'.pdf')
     #plot histogram normalized
     plt.cla()
     palette = plt.get_cmap('plasma')
@@ -155,21 +155,21 @@ def plot_synset_layer_distribution(pos_feature_counts, size, name):
         plt.plot(thresholds,d, '-'+types[counter%3], label=l, color=palette(counter))
         counter+=20
     plt.legend(loc='upper right')
-    plt.savefig('../plots/layer_distribution_pos_feats_norm_'+name+'.pdf')
+    plt.savefig('plots/layer_distribution_pos_feats_norm_'+name+'.pdf')
     
 
 """
 This code generates plots showing the distribution of "synset features" through layers. For each synset two plots are generated. Each plot shows the distribution of features per layer, as the threshold of minimum activated images varies. One plot shows the data in absolute number of features, and the other normalizing by the number of features in the layer. Plots are stored in "../plots"
 REQUIRES: 
-    -Access to the results of step 3 (var location).
+    -Access to the results of step 3 (var step3_data_location).
     -Access to tiramisu methods (see top of the file)
     -The embeddings to be from vgg16 (see top of the file, var layers)
 """
 def main():
-        location =  '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
-        folders =  next(os.walk(location))[1]
+        step3_data_location =  '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
+        folders =  next(os.walk(step3_data_location))[1]
         for job_label in folders[2:]:
-                _path = location + job_label
+                _path = step3_data_location + job_label
                 try:
                     name = extract_synset_name(_path)
                     pos_feature_counts, size = read_embedding(job_label,_path)
