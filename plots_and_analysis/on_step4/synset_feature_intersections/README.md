@@ -1,0 +1,1 @@
+This code loads the synset features listed by step4, and finds the interesections among all possible directed paths. Intersection is normalized by the size of the first one (A B X% means percentatge of features of A which are within B).

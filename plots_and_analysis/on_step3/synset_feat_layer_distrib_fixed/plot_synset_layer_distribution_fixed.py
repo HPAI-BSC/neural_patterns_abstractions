@@ -119,57 +119,42 @@ def plot_synset_layer_distribution(pos_feature_counts, size, name):
     :name: name of the synset
     """
     #which thresholds are going to be considered?
-    thresholds = [30,40,50,60,70,80,90,100]
+    threshold = 50
     #Initialize the data structures for storing the plot points
-    data_points_by_layer = np.zeros((len(layers.keys()),len(thresholds)))
-    data_points_by_layer_norm = np.zeros((len(layers.keys()),len(thresholds)))
-    #keep track of layer number
-    counter = 0
+    data_points_by_layer = np.zeros(len(layers.keys()))
+    data_points_by_layer_norm = np.zeros(len(layers.keys()))
     #Generate data per layer
-    for l in layers.keys():
+    for idx_l, l in enumerate(layers.keys()):
         layer_range = layers[l]
-        #Generate data per threshold level
-        for idx_t,t in enumerate(thresholds):
-            #Get number of features within layer and above threshold
-            val = len([x for idx,x in enumerate(pos_feature_counts) if idx >= layer_range[0] and idx <= layer_range[1] and x/size > (t*0.01)])
-            #Store raw data, store normalized data
-            data_points_by_layer[counter][idx_t] = val
-            val = val/(layer_range[1]-layer_range[0])
-            data_points_by_layer_norm[counter][idx_t] = val
-        counter+=1
+        #Get number of features within layer and above threshold
+        val = len([x for idx,x in enumerate(pos_feature_counts) if idx >= layer_range[0] and idx <= layer_range[1] and x/size > (threshold*0.01)])
+        #Store raw data, store normalized data
+        data_points_by_layer[idx_l] = val
+        val = val/(layer_range[1]-layer_range[0])
+        data_points_by_layer_norm[idx_l] = val
     #plot histogram
-    palette = plt.get_cmap('plasma')
-    types = ['o','*','X']
-    counter = 0
-    for d,l in zip(data_points_by_layer,layers.keys()):
-        plt.plot(thresholds,d, '-'+types[counter%3], label=l, color=palette(counter))
-        counter+=20
-    plt.legend(loc='upper right')
-    plt.savefig('../plots/layer_distribution_pos_feats_'+name+'.pdf')
+    plt.plot(range(0,len(layers.keys())), data_points_by_layer)
+    plt.xticks(np.arange(len(layers.keys())), (layers.keys()), rotation=70, fontsize=6)
+    plt.savefig('plots/layer_distribution_pos_feats_fixed_'+name+'.pdf')
     #plot histogram normalized
     plt.cla()
-    palette = plt.get_cmap('plasma')
-    types = ['o','*','X']
-    counter = 0
-    for d,l in zip(data_points_by_layer_norm,layers.keys()):
-        plt.plot(thresholds,d, '-'+types[counter%3], label=l, color=palette(counter))
-        counter+=20
-    plt.legend(loc='upper right')
-    plt.savefig('../plots/layer_distribution_pos_feats_norm_'+name+'.pdf')
+    plt.plot(range(0,len(layers.keys())), data_points_by_layer_norm)
+    plt.xticks(np.arange(len(layers.keys())), (layers.keys()), rotation=70, fontsize=6)
+    plt.savefig('plots/layer_distribution_pos_feats_fixed_norm_'+name+'.pdf')
     
 
 """
 This code generates plots showing the distribution of "synset features" through layers. For each synset two plots are generated. Each plot shows the distribution of features per layer, as the threshold of minimum activated images varies. One plot shows the data in absolute number of features, and the other normalizing by the number of features in the layer. Plots are stored in "../plots"
 REQUIRES: 
-    -Access to the results of step 3 (var location).
+    -Access to the results of step 3 (var step3_data_location).
     -Access to tiramisu methods (see top of the file)
     -The embeddings to be from vgg16 (see top of the file, var layers)
 """
 def main():
-        location =  '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
-        folders =  next(os.walk(location))[1]
+        step3_data_location =  '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
+        folders =  next(os.walk(step3_data_location))[1]
         for job_label in folders[2:]:
-                _path = location + job_label
+                _path = step3_data_location + job_label
                 try:
                     name = extract_synset_name(_path)
                     pos_feature_counts, size = read_embedding(job_label,_path)

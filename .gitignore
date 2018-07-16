@@ -1,3 +1,5 @@
 \.idea/
-plots/*
 data/models/
+plots_and_analysis/on_step3/synset_feat_layer_distrib_fixed/plots/*
+plots_and_analysis/on_step3/synset_feat_layer_distrib_thresholded/plots/*
+plots_and_analysis/on_step3/synset_feature_interesections/data/*
