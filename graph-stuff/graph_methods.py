@@ -74,9 +74,8 @@ def separate_per_layer(feature_array):
             feature_dict[layer_name] = np.append(feature_dict[layer_name], f)
         except:
             feature_dict[layer_name] = np.array([f])
-    # print(feature_dicctionary)
-
-    return OrderedDict(sorted(feature_dict.items(), key=lambda t: t[1]))
+    # print(feature_dict)
+    return OrderedDict(sorted(feature_dict.items(), key=lambda t: t[0]))
 
 
 
@@ -187,9 +186,9 @@ def extract_weights_of_interest(feature_dict):
     weights = np.array([])
     weights_conv = np.array([])
     weights_fc = np.array([])
-    layers = feature_dict.keys()
+    layers = list(feature_dict.keys())
     all_weights = load_weights(WEIGHTS_PATH)
-    for l in range(layers):
+    for l in range(len(layers)):
         layer = layers[l]
         if layer == 'fc7':
             break
@@ -206,14 +205,27 @@ def extract_weights_of_interest(feature_dict):
                 wa = np.reshape(w, (7, 7, 512))
                 for feature1 in feature_dict[layer]:
                     weights = np.append(weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
-                    weights_fc = np.append(weights_fc, w[:, :, feature1 - conv_layers[layer][0]].flatten())
+                    weights_fc = np.append(weights_fc, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
         if next_layer == 'fc7':
             for feature2 in feature_dict[next_layer]:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 for feature1 in feature_dict[layer]:
                     weights = np.append(weights, w[feature1 - conv_layers[layer][0]])
-                    weights_fc = np.append(weights_fc, w[:, :, feature1 - conv_layers[layer][0]].flatten())
-    return weights , weights_conv, weights_fc
+                    weights_fc = np.append(weights_fc, w[feature1 - conv_layers[layer][0]])
+    return weights, weights_conv, weights_fc
+
+
+def plot_hist(a, name):
+    plt.figure()
+    plt.hist(a, bins=10)
+    plt.savefig(PLOT_PATH + name + '.png')
+
+
+def plot_weights_of_interest(feature_dict):
+    w, w_c, w_fc = extract_weights_of_interest(feature_dict)
+    plot_hist(w, 'all_interest_weights')
+    plot_hist(w_c, 'conv_interest_weights')
+    plot_hist(w_fc, 'fc_interest_weights')
 
 
 def extract_weights_of_interest_with_mixed_origin(feture_dict):
@@ -235,15 +247,16 @@ def extract_weights_of_interest_with_mixed_destination(feture_dict):
     """
     pass
 
+
 def main():
     hunting_dog = np.load(ARRAY_PATH + 'hunting_dog_pos_features_maj_ones.npz')['pos_features']
 
     ss = hunting_dog
 
     ss_dictionary = separate_per_layer(ss)
-
-    for k in ss_dictionary.keys():
-        weigh_distribution(ss_dictionary[k], 'hunting_dog_' + k)
+    plot_weights_of_interest(ss_dictionary)
+    # for k in ss_dictionary.keys():
+    #     weigh_distribution(ss_dictionary[k], 'hunting_dog_' + k)
 
 
 # plt.figure(1)
