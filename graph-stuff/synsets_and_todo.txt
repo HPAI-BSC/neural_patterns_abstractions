@@ -1,0 +1,66 @@
+['structure_images.npz', 
+'entity_images.npz', 
+'animal_images.npz',
+'aquatic_bird_images.npz',
+'solid_images.npz', 
+'hunting_dog_images.npz',
+'equipment_images.npz',
+'consumer_goods_images.npz', 
+'mammal_images.npz', 
+'arthropod_images.npz', 
+'chordate_images.npz', 
+'living_thing_images.npz',
+'covering_images.npz', 
+'carnivore_images.npz',
+'craft_images.npz',
+'invertebrate_images.npz',
+'vertebrate_images.npz',
+'self-propelled_vehicle_images.npz',
+'clothing_images.npz',
+'canine_images.npz', 
+'terrier_images.npz', 
+'insect_images.npz', 
+'implement_images.npz', 
+'dog_images.npz', 
+'motor_vehicle_images.npz',
+'vehicle_images.npz',
+'vessel_images.npz', 
+'reptile_images.npz',
+'musical_instrument_images.npz', 
+'furniture_images.npz', 
+'commodity_images.npz', 
+'wheeled_vehicle_images.npz', 
+'artifact_images.npz', 
+'conveyance_images.npz', 
+'domestic_animal_images.npz', 
+'primate_images.npz', 
+'working_dog_images.npz', 
+'garment_images.npz', 
+'bird_images.npz',
+'instrument_images.npz', 
+'substance_images.npz', 
+'matter_images.npz', 
+'furnishing_images.npz', 
+'container_images.npz', 
+'instrumentality_images.npz', 
+'diapsid_images.npz', 
+'produce_images.npz', 
+'protective_covering_images.npz', 
+'device_images.npz', 
+'placental_images.npz']
+
+
+REMOVE?
+1286844 whole
+
+DEAD:
+
+1286709 'entity'
+1286685 'food'
+ '1286738', 'organism'
+ '1286956', 'physical_entity'
+ '1286762', 'object'
+
+TODO:
+Meter parche para los synsets que contienen todo el embedding (o casi).
+Meter parche para los synsets con el mismo número de imágenes. 
