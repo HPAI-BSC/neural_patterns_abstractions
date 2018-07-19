@@ -188,15 +188,20 @@ def extract_weights_of_interest(all_interest_nodes):
     weights_fc = np.array([])
     layers = list(all_interest_nodes.keys())
     all_weights = load_weights(WEIGHTS_PATH)
+
+    per_layer = {}
+
     for l in range(len(layers)):
         layer = layers[l]
         if layer == 'fc7':
             break
         next_layer = layers[l+1]
+        local_weights = []
         if 'conv' in next_layer:
             for feature2 in all_interest_nodes[next_layer]:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 for feature1 in all_interest_nodes[layer]:
+                    local_weights = np.append(local_weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_conv = np.append(weights_conv, w[:, :, feature1 - conv_layers[layer][0]].flatten())
         if next_layer == 'fc6':
@@ -204,15 +209,18 @@ def extract_weights_of_interest(all_interest_nodes):
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 wa = np.reshape(w, (7, 7, 512))
                 for feature1 in all_interest_nodes[layer]:
+                    local_weights = np.append(local_weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_fc = np.append(weights_fc, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
         if next_layer == 'fc7':
             for feature2 in all_interest_nodes[next_layer]:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 for feature1 in all_interest_nodes[layer]:
+                    local_weights = np.append(local_weights, w[feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, w[feature1 - conv_layers[layer][0]])
                     weights_fc = np.append(weights_fc, w[feature1 - conv_layers[layer][0]])
-    return weights, weights_conv, weights_fc
+        per_layer[layer] = local_weights
+    return weights, weights_conv, weights_fc, per_layer
 
 
 def plot_hist(a, name):
@@ -226,20 +234,20 @@ def plot_weights_of_interest(all_interest_nodes, name):
     # plot_hist(w, 'all_interest_weights_' + name)
     # plot_hist(w_c, 'conv_interest_weights_' + name)
     # plot_hist(w_fc, 'fc_interest_weights_' + name)
-    print('interest weights extracted and ploted')
-    w, w_c, w_fc = extract_weights_of_interest_with_normal_origin(all_interest_nodes)
-    print('calculated')
-    plot_hist(w, 'all_interest_weights_mixed_origin_' + name)
-    plot_hist(w_c, 'conv_interest_weights_mixed_origin_' + name)
-    plot_hist(w_fc, 'fc_interest_weights_mixed_origin_' + name)
-    print('interest weights origin extracted and ploted')
+    # print('interest weights extracted and ploted')
+    # w, w_c, w_fc = extract_weights_of_interest_with_normal_origin(all_interest_nodes)
+    # print('calculated')
+    # plot_hist(w, 'all_interest_weights_mixed_origin_' + name)
+    # plot_hist(w_c, 'conv_interest_weights_mixed_origin_' + name)
+    # plot_hist(w_fc, 'fc_interest_weights_mixed_origin_' + name)
+    # print('interest weights origin extracted and ploted')
 
-    # w, w_c, w_fc = extract_weights_of_interest_with_normal_destination(all_interest_nodes)
-    # plot_hist(w, 'all_interest_weights_mixed_destination' + name)
-    # plot_hist(w_c, 'conv_interest_weights_mixed_destination' + name)
-    # plot_hist(w_fc, 'fc_interest_weights_mixed_destination' + name)
-    #
-    # print('interest weights destiny extracted and ploted')
+    w, w_c, w_fc = extract_weights_of_interest_with_normal_destination(all_interest_nodes)
+    plot_hist(w, 'all_interest_weights_mixed_destination' + name)
+    plot_hist(w_c, 'conv_interest_weights_mixed_destination' + name)
+    plot_hist(w_fc, 'fc_interest_weights_mixed_destination' + name)
+
+    print('interest weights destiny extracted and ploted')
 
 
 def extract_weights_of_interest_with_normal_origin(all_interest_nodes):
@@ -255,11 +263,15 @@ def extract_weights_of_interest_with_normal_origin(all_interest_nodes):
     layers = list(all_interest_nodes.keys())
     all_weights = load_weights(WEIGHTS_PATH)
 
+    per_layer = {}
+
     for l in range(len(layers)):
         layer = layers[l]
 
         if layer == 'fc7':
             break
+
+        local_weights = []
 
         next_layer = layers[l + 1]
 
@@ -279,6 +291,7 @@ def extract_weights_of_interest_with_normal_origin(all_interest_nodes):
             for feature2 in interest_nodes:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 for feature1 in normal_nodes:
+                    local_weights = np.append(local_weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_conv = np.append(weights_conv, w[:, :, feature1 - conv_layers[layer][0]].flatten())
 
@@ -287,6 +300,7 @@ def extract_weights_of_interest_with_normal_origin(all_interest_nodes):
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 wa = np.reshape(w, (7, 7, 512))
                 for feature1 in normal_nodes:
+                    local_weights = np.append(local_weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_fc = np.append(weights_fc, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
 
@@ -294,10 +308,12 @@ def extract_weights_of_interest_with_normal_origin(all_interest_nodes):
             for feature2 in interest_nodes:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 for feature1 in normal_nodes:
+                    local_weights = np.append(local_weights, w[feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, w[feature1 - conv_layers[layer][0]])
                     weights_fc = np.append(weights_fc, w[feature1 - conv_layers[layer][0]])
 
-    return weights, weights_conv, weights_fc
+        per_layer[layer] = local_weights
+    return weights, weights_conv, weights_fc, per_layer
 
 
 def extract_weights_of_interest_with_normal_destination(all_interest_nodes):
@@ -312,6 +328,9 @@ def extract_weights_of_interest_with_normal_destination(all_interest_nodes):
     weights_fc = np.array([])
     layers = list(all_interest_nodes.keys())
     all_weights = load_weights(WEIGHTS_PATH)
+
+    per_layer = {}
+
     for l in range(len(layers)):
         layer = layers[l]
         if layer == 'fc7':
@@ -330,11 +349,12 @@ def extract_weights_of_interest_with_normal_destination(all_interest_nodes):
         interest_nodes = interest_nodes_origin
         normal_nodes = normal_nodes_destination
 
-
+        local_weights = []
         if 'conv' in next_layer:
             for feature2 in normal_nodes:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 for feature1 in interest_nodes:
+                    local_weights = np.append(local_weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_conv = np.append(weights_conv, w[:, :, feature1 - conv_layers[layer][0]].flatten())
 
@@ -343,6 +363,7 @@ def extract_weights_of_interest_with_normal_destination(all_interest_nodes):
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 wa = np.reshape(w, (7, 7, 512))
                 for feature1 in interest_nodes:
+                    local_weights = np.append(local_weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_fc = np.append(weights_fc, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
 
@@ -350,10 +371,12 @@ def extract_weights_of_interest_with_normal_destination(all_interest_nodes):
             for feature2 in normal_nodes:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 for feature1 in interest_nodes:
+                    local_weights = np.append(local_weights, w[feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, w[feature1 - conv_layers[layer][0]])
                     weights_fc = np.append(weights_fc, w[feature1 - conv_layers[layer][0]])
+        per_layer[layer] = local_weights
 
-    return weights, weights_conv, weights_fc
+    return weights, weights_conv, weights_fc, per_layer
 
 
 def main():
