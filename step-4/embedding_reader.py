@@ -44,7 +44,7 @@ def extract_synset_name(path):
 
 def read_embedding( job_label,embedding_path,data_path='/gpfs/projects/bsc28/semantic_transfer_scripts/data/', delete=False):
         """
-        embedding_path expecgted:  returns /gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/1284246
+        embedding_path expected:  returns /gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/1284246
         This function loads the embedding correspondent to the synset synset_name on the given embedding_path and extracts the
         features that have majority of images with value 1.
         :param synset_name:
