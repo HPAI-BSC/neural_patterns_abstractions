@@ -1,5 +1,10 @@
 """
 In this file i will put the basic methods to represent the embedding graph.
+TODO:
+(Histogramas )Hacer el maximo de los pesos
+Hacer un plot con las 3 graficas super puestas
+Normalizar los histogramas por pesos
+Guardar los datos para no tener que generarlos cada vez
 """
 import numpy as np
 from collections import OrderedDict
@@ -209,7 +214,7 @@ def extract_weights_of_interest(all_interest_nodes):
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 wa = np.reshape(w, (7, 7, 512))
                 for feature1 in all_interest_nodes[layer]:
-                    local_weights = np.append(local_weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
+                    local_weights = np.append(local_weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights = np.append(weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_fc = np.append(weights_fc, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
         if next_layer == 'fc7':
@@ -225,27 +230,38 @@ def extract_weights_of_interest(all_interest_nodes):
 
 def plot_hist(a, name):
     plt.figure()
-    plt.hist(a, bins=10)
+    plt.hist(a, bins=100)
     plt.savefig(PLOT_PATH + name + '.png')
 
 
 def plot_weights_of_interest(all_interest_nodes, name):
-    # w, w_c, w_fc = extract_weights_of_interest(all_interest_nodes)
+    w, w_c, w_fc, wpl = extract_weights_of_interest(all_interest_nodes)
     # plot_hist(w, 'all_interest_weights_' + name)
     # plot_hist(w_c, 'conv_interest_weights_' + name)
     # plot_hist(w_fc, 'fc_interest_weights_' + name)
-    # print('interest weights extracted and ploted')
-    # w, w_c, w_fc = extract_weights_of_interest_with_normal_origin(all_interest_nodes)
-    # print('calculated')
+
+    for layer in wpl:
+        plot_hist(wpl[layer], '_' + layer)
+
+    print('interest weights extracted and ploted')
+    w, w_c, w_fc, wpl = extract_weights_of_interest_with_normal_origin(all_interest_nodes)
+    print('calculated')
     # plot_hist(w, 'all_interest_weights_mixed_origin_' + name)
     # plot_hist(w_c, 'conv_interest_weights_mixed_origin_' + name)
     # plot_hist(w_fc, 'fc_interest_weights_mixed_origin_' + name)
-    # print('interest weights origin extracted and ploted')
 
-    w, w_c, w_fc = extract_weights_of_interest_with_normal_destination(all_interest_nodes)
-    plot_hist(w, 'all_interest_weights_mixed_destination' + name)
-    plot_hist(w_c, 'conv_interest_weights_mixed_destination' + name)
-    plot_hist(w_fc, 'fc_interest_weights_mixed_destination' + name)
+    for layer in wpl:
+        plot_hist(wpl[layer], '_' + layer)
+
+    print('interest weights origin extracted and ploted')
+
+    w, w_c, w_fc, wpl = extract_weights_of_interest_with_normal_destination(all_interest_nodes)
+    # plot_hist(w, 'all_interest_weights_mixed_destination' + name)
+    # plot_hist(w_c, 'conv_interest_weights_mixed_destination' + name)
+    # plot_hist(w_fc, 'fc_interest_weights_mixed_destination' + name)
+
+    for layer in wpl:
+        plot_hist(wpl[layer], '_' + layer)
 
     print('interest weights destiny extracted and ploted')
 

@@ -62,8 +62,8 @@ DEAD:
  '1286762', 'object'
 
 TODO:
-Meter parche para los synsets que contienen todo el embedding (o casi).
-Meter parche para los synsets con el mismo número de imágenes. 
+Meter parche para los synsets con el mismo número de imágenes.
+Guardar el nombre del synset en wordnet en vez de en legible por personas (dog.n.01).
 Documentación
 
 ? paralelizar el cálculo de los pesos de los nodos mixtos.
