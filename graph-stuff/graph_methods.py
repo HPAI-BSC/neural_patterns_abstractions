@@ -176,17 +176,17 @@ def weigh_distribution(features_array, name='patata'):
         plt.savefig(PLOT_PATH + name + '_fc.png')
 
 
-def extract_weights_of_interest(feature_dict):
+def extract_weights_of_interest(all_interest_nodes):
     """
     The main idea of this code is extract the connexion between neurons with income connection such that have value one on
     their corresponding fne value is one.
-    :param feature_dict:
+    :param all_interest_nodes:
     :return:
     """
     weights = np.array([])
     weights_conv = np.array([])
     weights_fc = np.array([])
-    layers = list(feature_dict.keys())
+    layers = list(all_interest_nodes.keys())
     all_weights = load_weights(WEIGHTS_PATH)
     for l in range(len(layers)):
         layer = layers[l]
@@ -194,22 +194,22 @@ def extract_weights_of_interest(feature_dict):
             break
         next_layer = layers[l+1]
         if 'conv' in next_layer:
-            for feature2 in feature_dict[next_layer]:
+            for feature2 in all_interest_nodes[next_layer]:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
-                for feature1 in feature_dict[layer]:
+                for feature1 in all_interest_nodes[layer]:
                     weights = np.append(weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_conv = np.append(weights_conv, w[:, :, feature1 - conv_layers[layer][0]].flatten())
         if next_layer == 'fc6':
-            for feature2 in feature_dict[next_layer]:
+            for feature2 in all_interest_nodes[next_layer]:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
                 wa = np.reshape(w, (7, 7, 512))
-                for feature1 in feature_dict[layer]:
+                for feature1 in all_interest_nodes[layer]:
                     weights = np.append(weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
                     weights_fc = np.append(weights_fc, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
         if next_layer == 'fc7':
-            for feature2 in feature_dict[next_layer]:
+            for feature2 in all_interest_nodes[next_layer]:
                 w = fne_feature_to_vgg16_block(feature2, all_weights)
-                for feature1 in feature_dict[layer]:
+                for feature1 in all_interest_nodes[layer]:
                     weights = np.append(weights, w[feature1 - conv_layers[layer][0]])
                     weights_fc = np.append(weights_fc, w[feature1 - conv_layers[layer][0]])
     return weights, weights_conv, weights_fc
@@ -221,31 +221,139 @@ def plot_hist(a, name):
     plt.savefig(PLOT_PATH + name + '.png')
 
 
-def plot_weights_of_interest(feature_dict):
-    w, w_c, w_fc = extract_weights_of_interest(feature_dict)
-    plot_hist(w, 'all_interest_weights')
-    plot_hist(w_c, 'conv_interest_weights')
-    plot_hist(w_fc, 'fc_interest_weights')
+def plot_weights_of_interest(all_interest_nodes, name):
+    # w, w_c, w_fc = extract_weights_of_interest(all_interest_nodes)
+    # plot_hist(w, 'all_interest_weights_' + name)
+    # plot_hist(w_c, 'conv_interest_weights_' + name)
+    # plot_hist(w_fc, 'fc_interest_weights_' + name)
+    print('interest weights extracted and ploted')
+    w, w_c, w_fc = extract_weights_of_interest_with_normal_origin(all_interest_nodes)
+    print('calculated')
+    plot_hist(w, 'all_interest_weights_mixed_origin_' + name)
+    plot_hist(w_c, 'conv_interest_weights_mixed_origin_' + name)
+    plot_hist(w_fc, 'fc_interest_weights_mixed_origin_' + name)
+    print('interest weights origin extracted and ploted')
+
+    # w, w_c, w_fc = extract_weights_of_interest_with_normal_destination(all_interest_nodes)
+    # plot_hist(w, 'all_interest_weights_mixed_destination' + name)
+    # plot_hist(w_c, 'conv_interest_weights_mixed_destination' + name)
+    # plot_hist(w_fc, 'fc_interest_weights_mixed_destination' + name)
+    #
+    # print('interest weights destiny extracted and ploted')
 
 
-def extract_weights_of_interest_with_mixed_origin(feture_dict):
+def extract_weights_of_interest_with_normal_origin(all_interest_nodes):
     """
     The main idea of this code is extract the connexion between neurons with income connection such that have value one on
     their corresponding fne value is one.
     :param feture_dict:
     :return:
     """
-    pass
+    weights = np.array([])
+    weights_conv = np.array([])
+    weights_fc = np.array([])
+    layers = list(all_interest_nodes.keys())
+    all_weights = load_weights(WEIGHTS_PATH)
+
+    for l in range(len(layers)):
+        layer = layers[l]
+
+        if layer == 'fc7':
+            break
+
+        next_layer = layers[l + 1]
+
+        all_nodes_origin = np.array(range(conv_layers[layer][0], conv_layers[layer][1]))
+        all_nodes_destination = np.array(range(conv_layers[next_layer][0], conv_layers[next_layer][1]))
+
+        interest_nodes_origin = all_interest_nodes[layer]
+        interest_nodes_destination = all_interest_nodes[next_layer]
+        normal_nodes_origin = np.setdiff1d(all_nodes_origin, interest_nodes_origin)
+        normal_nodes_destination = np.setdiff1d(all_nodes_destination, interest_nodes_destination)
 
 
-def extract_weights_of_interest_with_mixed_destination(feture_dict):
+        interest_nodes = interest_nodes_destination
+        normal_nodes = normal_nodes_origin
+
+        if 'conv' in next_layer:
+            for feature2 in interest_nodes:
+                w = fne_feature_to_vgg16_block(feature2, all_weights)
+                for feature1 in normal_nodes:
+                    weights = np.append(weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
+                    weights_conv = np.append(weights_conv, w[:, :, feature1 - conv_layers[layer][0]].flatten())
+
+        if next_layer == 'fc6':
+            for feature2 in interest_nodes:
+                w = fne_feature_to_vgg16_block(feature2, all_weights)
+                wa = np.reshape(w, (7, 7, 512))
+                for feature1 in normal_nodes:
+                    weights = np.append(weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
+                    weights_fc = np.append(weights_fc, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
+
+        if next_layer == 'fc7':
+            for feature2 in interest_nodes:
+                w = fne_feature_to_vgg16_block(feature2, all_weights)
+                for feature1 in normal_nodes:
+                    weights = np.append(weights, w[feature1 - conv_layers[layer][0]])
+                    weights_fc = np.append(weights_fc, w[feature1 - conv_layers[layer][0]])
+
+    return weights, weights_conv, weights_fc
+
+
+def extract_weights_of_interest_with_normal_destination(all_interest_nodes):
     """
     The main idea of this code is extract the connexion between neurons with income connection such that have value one on
     their corresponding fne value is one.
     :param feture_dict:
     :return:
     """
-    pass
+    weights = np.array([])
+    weights_conv = np.array([])
+    weights_fc = np.array([])
+    layers = list(all_interest_nodes.keys())
+    all_weights = load_weights(WEIGHTS_PATH)
+    for l in range(len(layers)):
+        layer = layers[l]
+        if layer == 'fc7':
+            break
+
+        next_layer = layers[l + 1]
+
+        all_nodes_origin = np.array(range(conv_layers[layer][0], conv_layers[layer][1]))
+        all_nodes_destination = np.array(range(conv_layers[next_layer][0], conv_layers[next_layer][1]))
+
+        interest_nodes_origin = all_interest_nodes[layer]
+        interest_nodes_destination = all_interest_nodes[next_layer]
+        normal_nodes_origin = np.setdiff1d(all_nodes_origin, interest_nodes_origin)
+        normal_nodes_destination = np.setdiff1d(all_nodes_destination, interest_nodes_destination)
+
+        interest_nodes = interest_nodes_origin
+        normal_nodes = normal_nodes_destination
+
+
+        if 'conv' in next_layer:
+            for feature2 in normal_nodes:
+                w = fne_feature_to_vgg16_block(feature2, all_weights)
+                for feature1 in interest_nodes:
+                    weights = np.append(weights, w[:, :, feature1 - conv_layers[layer][0]].flatten())
+                    weights_conv = np.append(weights_conv, w[:, :, feature1 - conv_layers[layer][0]].flatten())
+
+        if next_layer == 'fc6':
+            for feature2 in normal_nodes:
+                w = fne_feature_to_vgg16_block(feature2, all_weights)
+                wa = np.reshape(w, (7, 7, 512))
+                for feature1 in interest_nodes:
+                    weights = np.append(weights, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
+                    weights_fc = np.append(weights_fc, wa[:, :, feature1 - conv_layers[layer][0]].flatten())
+
+        if next_layer == 'fc7':
+            for feature2 in normal_nodes:
+                w = fne_feature_to_vgg16_block(feature2, all_weights)
+                for feature1 in interest_nodes:
+                    weights = np.append(weights, w[feature1 - conv_layers[layer][0]])
+                    weights_fc = np.append(weights_fc, w[feature1 - conv_layers[layer][0]])
+
+    return weights, weights_conv, weights_fc
 
 
 def main():
@@ -254,7 +362,8 @@ def main():
     ss = hunting_dog
 
     ss_dictionary = separate_per_layer(ss)
-    plot_weights_of_interest(ss_dictionary)
+
+    plot_weights_of_interest(ss_dictionary, 'hunting_dog')
     # for k in ss_dictionary.keys():
     #     weigh_distribution(ss_dictionary[k], 'hunting_dog_' + k)
 

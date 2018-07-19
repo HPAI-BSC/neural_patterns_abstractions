@@ -64,3 +64,6 @@ DEAD:
 TODO:
 Meter parche para los synsets que contienen todo el embedding (o casi).
 Meter parche para los synsets con el mismo número de imágenes. 
+Documentación
+
+? paralelizar el cálculo de los pesos de los nodos mixtos.
