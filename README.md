@@ -52,4 +52,12 @@ To do so, we will use the tiramisu3.0 code on the minotauro.
 ### Fourth Step
 This code is in: /gpfs/projects/bsc28/semantic_transfer_scripts/code/embedding_reader.py
 
-In this step we extract the more representatives features for each of the synsets selected.
+In this step we extract the features with more than the 50% of images with value one on the embedding
+for each one of the synsets selected.
+
+This way is expected to obtain a list of the features that represent the synset the most. 
+
+**Input**:  One embedding per synset selected.
+
+**Output**: A npz file with the representative features per synset.
+ his file also has a dictionary with the layer architecture.
