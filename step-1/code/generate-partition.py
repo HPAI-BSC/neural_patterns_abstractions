@@ -208,7 +208,7 @@ def interest_synsets():
         all_hypers = generate_all_hypers()
 
     for h in all_hypers:
-        if index_and_hyponims_from_label(h).sum() >= 1000 and index_and_hyponims_from_label(h).sum() < 50000:
+        if index_and_hyponims_from_label(h).sum() >= 1000 and index_and_hyponims_from_label(h).sum() <= 40000:
             counter += 1
             ss = np.append(ss, h)
     np.savez('../data/interest_ss.npz', ss=ss)
