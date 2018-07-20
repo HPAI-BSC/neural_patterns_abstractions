@@ -181,11 +181,11 @@ def generate_partition(goal_synset, format='npz'):
 			else:
 				no_ss = np.append(no_ss, l.strip().split()[0])
 
-	if len(ss) >= 1000 and len(ss) <= 4000:
+	if len(ss) >= 1000 and len(ss) <= 40000:
+		np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_hypernims.txt',
+		           hyper_list, fmt="%s")
 		if format == 'txt':
 			np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.txt', ss,
-			           fmt="%s")
-			np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_hypernims.txt', hyper_list,
 			           fmt="%s")
 			np.savetxt(
 				'../data/all_ss_partitions' + '/no_synset/no_' + img_ids_to_text([goal_synset])[0] + '_images.txt',
