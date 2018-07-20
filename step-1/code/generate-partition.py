@@ -13,7 +13,17 @@ import numpy as np
 from datetime import timedelta
 import time
 import functools as fu
+import os
 
+
+try:
+	mkdir('../data/all_ss_partitions/')
+except:
+	pass
+try:
+	mkdir('../data/all_ss_partitions/synset/')
+except:
+	pass
 
 def ss_to_text(synset):
 	""" Returns the name of a given synset"""
@@ -176,24 +186,20 @@ def generate_partition(goal_synset, format='npz'):
 			hypernyms = obtain_hypernyms(code)
 
 			if goal_synset in hypernyms:
-				hyper_list = np.append(hyper_list,str(wn.synset_from_pos_and_offset('n', int(code[1:]))))
+				hyper_list = np.append(hyper_list, str(wn.synset_from_pos_and_offset('n', int(code[1:]))))
 				ss = np.append(ss, l.strip().split()[0])
-			else:
+		else:
 				no_ss = np.append(no_ss, l.strip().split()[0])
 
 	if len(ss) >= 1000 and len(ss) <= 40000:
-		np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_hypernims.txt',
-		           hyper_list, fmt="%s")
+		np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_hypernims.txt', hyper_list, fmt="%s")
 		if format == 'txt':
-			np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.txt', ss,
-			           fmt="%s")
+			np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.txt', ss, fmt="%s")
 			np.savetxt(
 				'../data/all_ss_partitions' + '/no_synset/no_' + img_ids_to_text([goal_synset])[0] + '_images.txt',
 				no_ss, fmt="%s")
-		np.savez('../data/all_ss_partitions_npz' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.npz',
-		         name=str(goal_synset), code=goal_synset, imgs=ss,hyper=hyper_list )
-		np.savez('../data/all_ss_partitions_npz' + '/no_synset/no_' + img_ids_to_text([goal_synset])[0] + '_images.npz',
-		         name=str(goal_synset), code=goal_synset, imgs=no_ss)
+		np.savez('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.npz', name=str(goal_synset), code=goal_synset, imgs=ss, hyper=hyper_list)
+		# np.savez('../data/all_ss_partitions' + '/no_synset/no_' + img_ids_to_text([goal_synset])[0] + '_images.npz', name=str(goal_synset), code=goal_synset, imgs=no_ss)
 		return 1
 	return 0
 
