@@ -118,6 +118,7 @@ def generate_all_hypers():
 			if np.isin(h, all_hypers).sum():
 				pass
 			else:
+			if np.isin(h,all_ss):
 				all_hypers = np.append(all_hypers, h)
 
 	print(len(all_hypers), all_hypers)
@@ -171,7 +172,7 @@ def index_and_hyponims_from_label(ss):
 	return index
 
 
-def generate_partition(goal_synset, format='npz'):
+def generate_partition(goal_synset,all_ss, format='npz'):
 	"""
 	This function makes the partition of the images with the criteria if is goal_synset (or hyponym) or not.
 	And writes two files with this partion in ../data/goal_synset/ if there are more than 1000 images of this synset and less than 40000.
@@ -186,12 +187,13 @@ def generate_partition(goal_synset, format='npz'):
 			hypernyms = obtain_hypernyms(code)
 
 			if goal_synset in hypernyms:
-				hyper_list = np.append(hyper_list, str(wn.synset_from_pos_and_offset('n', int(code[1:]))))
+				if code in all_ss:
+					hyper_list = np.append(hyper_list, str(wn.synset_from_pos_and_offset('n', int(code[1:]))))
 				ss = np.append(ss, l.strip().split()[0])
 		else:
 				no_ss = np.append(no_ss, l.strip().split()[0])
 
-	if len(ss) >= 1000 and len(ss) <= 40000:
+	if len(ss) >= 500 and len(ss) <= 40000:
 		np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_hypernims.txt', hyper_list, fmt="%s")
 		if format == 'txt':
 			np.savetxt('../data/all_ss_partitions' + '/synset/' + img_ids_to_text([goal_synset])[0] + '_images.txt', ss, fmt="%s")
@@ -203,6 +205,18 @@ def generate_partition(goal_synset, format='npz'):
 		return 1
 	return 0
 
+
+def delete_repeated_ss(number_of_images):
+	to_delete = list()
+	for number in number_of_images.keys():
+		if len(number_of_images[number]) ==2:
+			if np.isin(get_wn_ss(number_of_images[number][0]), get_wn_ss(number_of_images[number][1]).hyponims()):
+				to_delete.append(number_of_images[number][1])
+			else if np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponims()):
+				to_delete.append(number_of_images[number][0])
+		if len(number_of_images[number]) > 2:
+			print(number_of_images[number], number)
+	return to_delete
 
 def interest_synsets():
 	"""
@@ -216,12 +230,16 @@ def interest_synsets():
 		all_hypers = np.load('../data/all_hypers.npz')['ss']
 	except:
 		all_hypers = generate_all_hypers()
-
+	number_of_images = {}
 	for h in all_hypers:
 		sume = index_and_hyponims_from_label(h).sum()
-		if sume >= 1000 and sume <= 40000:
+		if sume >= 500 and sume <= 40000:
 			counter += 1
 			ss = np.append(ss, h)
+			number_of_images[sume] = h
+	to_delete = delete_repeated_ss(number_of_images)
+	print('to delete', to_delete)
+	np.savez('../data/to_delete_ss.npz', ss=to_delete)
 	np.savez('../data/interest_ss.npz', ss=ss)
 	print(counter)
 
@@ -234,6 +252,10 @@ def extract_interest_synsets():
 	and generates their partitions.
 	:return:
 	"""
+	try:
+		all_ss = np.load('../data/all_ss.npz')['ss']
+	except:
+		all_ss = generate_all_ss()
 	counter = 0
 	try:
 		interest = np.load('../data/interest_ss.npz')['ss']
@@ -243,7 +265,7 @@ def extract_interest_synsets():
 		interest = interest_synsets()
 		print('interest calculated')
 	for h in interest:
-		counter += generate_partition(h)
+		counter += generate_partition(h, all_ss)
 	print(counter)
 
 
