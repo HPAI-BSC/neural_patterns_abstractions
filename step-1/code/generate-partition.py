@@ -17,11 +17,11 @@ import os
 
 
 try:
-	mkdir('../data/all_ss_partitions/')
+	os.mkdir('../data/all_ss_partitions/')
 except:
 	pass
 try:
-	mkdir('../data/all_ss_partitions/synset/')
+	os.mkdir('../data/all_ss_partitions/synset/')
 except:
 	pass
 
@@ -212,7 +212,7 @@ def delete_repeated_ss(number_of_images):
 		if len(number_of_images[number]) ==2:
 			if np.isin(get_wn_ss(number_of_images[number][0]), get_wn_ss(number_of_images[number][1]).hyponims()):
 				to_delete.append(number_of_images[number][1])
-			else if np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponims()):
+			elif np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponims()):
 				to_delete.append(number_of_images[number][0])
 		if len(number_of_images[number]) > 2:
 			print(number_of_images[number], number)
