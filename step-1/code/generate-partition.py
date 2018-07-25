@@ -102,7 +102,7 @@ def generate_all_ss():
 
 def generate_all_hypers():
 	"""
-	Generates a file with all the hyponyms of the set of synsets that appear in the imagenet2012_val_synset_codes file (without repetitions).
+	Generates a file with all the hypernyms of the set of synsets that appear in the imagenet2012_val_synset_codes file (without repetitions).
 	:return:
 	"""
 	try:
