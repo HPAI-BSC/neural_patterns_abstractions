@@ -35,14 +35,6 @@ try:
 except:
     pass
 
-NO_SYNSET_PARTITION_PATH = SYNSET_PARTITION_PATH + '/no_synset/'
-
-try:
-    os.mkdir(NO_SYNSET_PARTITION_PATH)
-except:
-    pass
-
-
 def ss_to_text(synset):
     """ Returns the name of a given synset"""
     return str(synset)[8:-7]
@@ -214,14 +206,10 @@ def generate_partition(goal_synset, all_ss, image_synset_file_path, min_synset_f
         np.savetxt(SYNSET_PARTITION_PATH + img_ids_to_text([goal_synset])[0] + '_hypernyms.txt',
                    hyper_list, fmt="%s")
         np.savez(SYNSET_PARTITION_PATH + img_ids_to_text([goal_synset])[0] + '_images.npz',
-                 name=str(goal_synset), code=goal_synset, imgs=ss, hyper=hyper_list)
-        # np.savez('NO_SYNSET_PARTITION_PATH + img_ids_to_text([goal_synset])[0] + '_images.npz', name=str(goal_synset), code=goal_synset, imgs=no_ss)
+                 name=str(get_wn_ss(goal_synset)), code=goal_synset, imgs=ss, hyper=hyper_list)
         if format == 'txt':
             np.savetxt(SYNSET_PARTITION_PATH + img_ids_to_text([goal_synset])[0] + '_images.txt', ss,
                        fmt="%s")
-            np.savetxt(NO_SYNSET_PARTITION_PATH + 'no_' + img_ids_to_text([goal_synset])[0] + '_images.txt',
-                       no_ss, fmt="%s")
-
         return 1
     return 0
 
@@ -271,7 +259,7 @@ def interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq):
             except:
                 number_of_images[sume] = [h]
     # to_delete = delete_repeated_ss(number_of_images)
-    #print('The following synsets will not be used due to redunancy:', to_delete)
+    # print('The following synsets will not be used due to redunancy:', to_delete)
     # np.savez('../data/to_delete_ss.npz', ss=to_delete)
     # np.savetxt('../data/to_delete_ss.txt', to_delete, fmt="%s")
     np.savez('../data/interest_ss.npz', ss=ss)
