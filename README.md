@@ -41,6 +41,7 @@ For this example if we take the synset 'dog', the structure of links generated b
 - path_location/imgs/dog/train/dog/images0008.JPEG
 - path_location/imgs/dog/train/no_dog/images00058.JPEG
 
+Once you create the structure, if you need to run the step3, you have to copy the data/imgs/ folder to tiramisu_semantic_transfer/imgs/
 
 ### Third Step
 This step creates the FNE for the selected synsets. This version uses the Tiramisu 3.0 interface, but an any other feature extraction library should work. 
