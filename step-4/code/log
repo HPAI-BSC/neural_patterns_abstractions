@@ -1,0 +1,48 @@
+['1286748', '1286747', '1286709', '1286708', '1286754', '1286768', '1286717', '1286767', '1286716', '1286738', '1286737', '1286773', '1286772', '1286759', '1284246', '1286758', '1286743', '1286706', '1286742', '1286705', '1286755', '1286728', '1286763', '1286726', '1286686', '1286762', '1286685']
+-----------------
+Going in with 1286748   hunting_dog
+Size of hunting_dog embedding (3150, 12416)
+Size of complementary embedding (46850, 12416)
+-----------------
+Going in with 1286747   domestic_animal
+Size of domestic_animal embedding (6150, 12416)
+Size of complementary embedding (43850, 12416)
+-----------------
+Going in with 1286709   entity
+Counter({'?': 50000})
+entity is broken
+-----------------
+Going in with 1286708   furniture
+Counter({'no_furniture': 48900, 'furniture': 1100})
+Size of furniture embedding (1100, 12416)
+Size of complementary embedding (48900, 12416)
+-----------------
+Going in with 1286754   primate
+Counter({'no_primate': 49000, 'primate': 1000})
+Size of primate embedding (1000, 12416)
+Size of complementary embedding (49000, 12416)
+-----------------
+Going in with 1286768   arthropod
+Counter({'no_arthropod': 47650, 'arthropod': 2350})
+Size of arthropod embedding (2350, 12416)
+Size of complementary embedding (47650, 12416)
+-----------------
+Going in with 1286717   animal
+Counter({'no_animal': 30100, 'animal': 19900})
+Size of animal embedding (19900, 12416)
+Size of complementary embedding (30100, 12416)
+-----------------
+Going in with 1286767   garment
+Counter({'no_garment': 48700, 'garment': 1300})
+Size of garment embedding (1300, 12416)
+Size of complementary embedding (48700, 12416)
+-----------------
+Going in with 1286716   commodity
+Counter({'no_commodity': 46850, 'commodity': 3150})
+Size of commodity embedding (3150, 12416)
+Size of complementary embedding (46850, 12416)
+-----------------
+Going in with 1286738   organism
+Counter({'no_organism': 29500, 'organism': 20500})
+Size of organism embedding (20500, 12416)
+Size of complementary embedding (29500, 12416)
