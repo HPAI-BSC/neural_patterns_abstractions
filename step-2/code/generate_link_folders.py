@@ -53,10 +53,11 @@ def create_link(synset_data):
 def create_folders(image_file_paths):
     synset_files = list(os.walk(image_file_paths))[0][2]
     # print(synset_files)
-    for file in synset_files[26:]:
-        ss_data = np.load(image_file_paths + file)
-        print(ss_data['name'])
-        create_link(ss_data)
+    for file in synset_files:
+        if '.npz' in file:
+            ss_data = np.load(image_file_paths + file)
+            print(ss_data['name'])
+            create_link(ss_data)
     print('links created :D ')
 
 
