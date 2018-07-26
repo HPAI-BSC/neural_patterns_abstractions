@@ -52,9 +52,11 @@ This step creates the FNE for the selected synsets. This version uses the Tirami
 
 ### Fourth Step
 This step we extract the features with more than the 50% of images with value 1 in the embedding for each one of the synsets selected.
-This is the list of neural patterns of visual abstractions.
+This is the list of neural patterns of visual abstractions. 
 
-**Input**:  One embedding per synset selected.
+You need to run this step from marenostrum.
 
-**Output**: A npz file with the representative features per synset.
+**Input**:  One embedding per synset selected. It loads the embeddings from '/gpfs/projects/bsc28/tiramisu_semantic_transfer'
+
+**Output**: A npz file with the representative features per synset. It saves this files on 'step-4/data/feature_lists/'
  his file also has a dictionary with the layer architecture.

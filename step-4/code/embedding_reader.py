@@ -145,8 +145,7 @@ def read_embedding(job_label, embedding_path, data_path='../data/feature_lists/'
         shutil.rmtree(embedding_path)
 
 
-def main():
-    location = '/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'
+def main(location='/gpfs/projects/bsc28/tiramisu_semantic_transfer/embeddings/'):
     folders = next(os.walk(location))[1]
     print(folders)
     for job_label in folders:
