@@ -136,10 +136,9 @@ def generate_all_hypers(image_synset_file_path):
             if np.isin(h, all_hypers).sum():
                 pass
             else:
-                if np.isin(h, all_ss):
-                    all_hypers = np.append(all_hypers, h)
+                all_hypers = np.append(all_hypers, h)
 
-    print(len(all_hypers), all_hypers)
+    print('Total hypernyms found:',len(all_hypers))
     np.savez('../data/all_hypers.npz', ss=all_hypers)
     return all_hypers
 
@@ -244,7 +243,7 @@ def delete_repeated_ss(number_of_images):
             elif np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponyms()):
                 to_delete.append(number_of_images[number][0])
         if len(number_of_images[number]) > 2:
-            print(number_of_images[number], number)
+            print('Synset',number,'contains the synsets',number_of_images[number],'and a total number of images:',number)
     return to_delete
 
 
@@ -270,7 +269,7 @@ def interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq):
             except:
                 number_of_images[sume] = [h]
     to_delete = delete_repeated_ss(number_of_images)
-    print('to delete', to_delete)
+    print('The following synsets will not be used due to redunancy:', to_delete)
     np.savez('../data/to_delete_ss.npz', ss=to_delete)
     np.savetxt('../data/to_delete_ss.txt', to_delete, fmt="%s")
     np.savez('../data/interest_ss.npz', ss=ss)
@@ -291,11 +290,11 @@ def extract_interest_synsets(image_synset_file_path, min_synset_freq, max_synset
         all_ss = generate_all_ss(image_synset_file_path)
     try:
         interest = np.load('../data/interest_ss.npz')['ss']
-        print('interest loaded')
+        print('Synset of interest have been loaded')
     except:
         print('Calculating interest synsets')
         interest = interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq)
-        print('Interest calculated, we have', len(interest), ' synsets')
+        print('Synsets of interest calculated. There are', len(interest), ' synsets')
 
     counter = 0
     for h in interest:
