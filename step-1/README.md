@@ -12,6 +12,7 @@ ILSVRC2012_val_00000001.JPEG n01751748
 ILSVRC2012_val_00000002.JPEG n09193705
 ILSVRC2012_val_00000003.JPEG n02105855 
 
+If you dont have this file, you can generate it with the generate_imagenet_val_synset_codes.py script, located within this same directory.
 
 **Output**:The partitions of all the synsets with more than 1000 images. 
 
