@@ -136,8 +136,7 @@ def generate_all_hypers(image_synset_file_path):
             if np.isin(h, all_hypers).sum():
                 pass
             else:
-                if np.isin(h, all_ss):
-                    all_hypers = np.append(all_hypers, h)
+                all_hypers = np.append(all_hypers, h)
 
     print(len(all_hypers), all_hypers)
     np.savez('../data/all_hypers.npz', ss=all_hypers)
@@ -237,14 +236,16 @@ def delete_repeated_ss(number_of_images):
     :return:
     """
     to_delete = list()
-    for number in number_of_images.keys():
-        if len(number_of_images[number]) == 2:
-            if np.isin(get_wn_ss(number_of_images[number][0]), get_wn_ss(number_of_images[number][1]).hyponyms()):
-                to_delete.append(number_of_images[number][1])
-            elif np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponyms()):
-                to_delete.append(number_of_images[number][0])
-        if len(number_of_images[number]) > 2:
-            print(number_of_images[number], number)
+    with open('../data/synsets_with_same_number_of_images.txt','w') as f:
+        for number in number_of_images.keys():
+            if len(number_of_images[number]) == 2:
+                if np.isin(get_wn_ss(number_of_images[number][0]), get_wn_ss(number_of_images[number][1]).hyponyms()):
+                    to_delete.append(number_of_images[number][1])
+                elif np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponyms()):
+                    to_delete.append(number_of_images[number][0])
+            if len(number_of_images[number]) > 2:
+                f.write(number_of_images[number], number)
+                f.write(str(img_ids_to_text(number_of_images[number])) ,number_of_images[number])
     return to_delete
 
 
