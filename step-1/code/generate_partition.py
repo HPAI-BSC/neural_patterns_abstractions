@@ -303,7 +303,7 @@ def extract_interest_synsets(image_synset_file_path, min_synset_freq, max_synset
     print('We have ', counter, 'partitions of synsets')
 
 
-def main(image_synset_file_path='../data/imagenet2012_val_synset_codes.txt', min_synset_freq=500,
+def main(image_synset_file_path='../../data/imagenet2012_val_synset_codes.txt', min_synset_freq=500,
          max_synset_freq=40000):
     extract_interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq)
 
