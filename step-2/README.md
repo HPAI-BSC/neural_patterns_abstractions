@@ -1,9 +1,7 @@
 ### Second Step
-This code is in:  /gpfs/projects/bsc28/semantic_transfer_scripts/code
+This code generates the directory structure needed by Tiramisu 3.0 to produce the FNE. This structure is analogous to the one needed by TensorFlow, and is also compatible with other deep learning frameworks.
 
-First we generate a tiramisu folder using the instructions on the FNE-tiramisu-version code. 
-
-**Input**: The files generated on the step 1 of the folder data/all_synset_partitions_npz/synset/ . There are 55 files. 
+**Input**: The files generated on the step 1 of the folder data/all_synset_partitions_npz/synset/ 
 
 
 **Output**:The folders with the symbolic links on tiramisu_nicename/imgs for every one of the selected synsets. 
