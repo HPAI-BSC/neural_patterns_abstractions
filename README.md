@@ -17,10 +17,10 @@ file: step-1/data/imagenet2012_val_synset_codes.txt
 
 **Output**:The partitions of all the synsets with more than 1000 images.
 
-For each synset it will create to files in data: 
+For each synset it will create two files in data: 
 
--  data/all_synset_partitions_npz/synset/name_imgs.npz
--  data/all_synset_partitions_npz/no_synset/no_name_imgs.npz
+-  data/synset_partitions/name_imgs.npz
+-  data/synset_partitions/name_hypernims.txt
 
 
 ### Second Step
