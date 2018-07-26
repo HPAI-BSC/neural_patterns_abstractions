@@ -250,7 +250,7 @@ def delete_repeated_ss(number_of_images):
 
 def interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq):
     """
-    This function calculates how many synsets have more than 1000 images and writes them in a file.
+    This function calculates how many synsets have the appropriate number of images and writes them in a file.
     :return:
     """
     counter = 0
@@ -281,7 +281,7 @@ def interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq):
 
 def extract_interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq):
     """
-    This function iterates over all the synsets that appear more than 1000 times on the dataset (counting hyponims)
+    This function iterates over all the synsets that have the appropriate number of images on the dataset (counting hyponyms)
     and generates their partitions.
     :return:
     """
