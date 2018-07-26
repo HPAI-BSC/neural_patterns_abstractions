@@ -271,7 +271,7 @@ def interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq):
             except:
                 number_of_images[sume] = [h]
     # to_delete = delete_repeated_ss(number_of_images)
-    print('The following synsets will not be used due to redunancy:', to_delete)
+    #print('The following synsets will not be used due to redunancy:', to_delete)
     # np.savez('../data/to_delete_ss.npz', ss=to_delete)
     # np.savetxt('../data/to_delete_ss.txt', to_delete, fmt="%s")
     np.savez('../data/interest_ss.npz', ss=ss)
