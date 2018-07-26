@@ -244,8 +244,8 @@ def delete_repeated_ss(number_of_images):
                 elif np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponyms()):
                     to_delete.append(number_of_images[number][0])
             if len(number_of_images[number]) > 2:
-                f.write(number_of_images[number], number)
-                f.write(str(img_ids_to_text(number_of_images[number])) ,number_of_images[number])
+                f.write(str(number_of_images[number]) + str(number))
+                f.write(str(img_ids_to_text(number_of_images[number])) + str(number_of_images[number]))
     return to_delete
 
 
@@ -270,10 +270,10 @@ def interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq):
                 number_of_images[sume].append(h)
             except:
                 number_of_images[sume] = [h]
-    to_delete = delete_repeated_ss(number_of_images)
+    # to_delete = delete_repeated_ss(number_of_images)
     print('The following synsets will not be used due to redunancy:', to_delete)
-    np.savez('../data/to_delete_ss.npz', ss=to_delete)
-    np.savetxt('../data/to_delete_ss.txt', to_delete, fmt="%s")
+    # np.savez('../data/to_delete_ss.npz', ss=to_delete)
+    # np.savetxt('../data/to_delete_ss.txt', to_delete, fmt="%s")
     np.savez('../data/interest_ss.npz', ss=ss)
     print(counter)
 
