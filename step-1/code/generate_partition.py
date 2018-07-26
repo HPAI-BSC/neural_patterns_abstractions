@@ -28,7 +28,7 @@ import time
 import functools as fu
 import os
 
-SYNSET_PARTITION_PATH = '../../data/synset_partitions/'
+SYNSET_PARTITION_PATH = '../data/synset_partitions/'
 
 try:
     os.mkdir(SYNSET_PARTITION_PATH)
@@ -114,7 +114,7 @@ def generate_all_ss(image_synset_file_path):
             else:
                 all_ss = np.append(all_ss, code)
 
-    np.savez('../../data/all_ss.npz', ss=all_ss)
+    np.savez('../data/all_ss.npz', ss=all_ss)
     return all_ss
 
 
@@ -139,7 +139,7 @@ def generate_all_hypers(image_synset_file_path):
                 all_hypers = np.append(all_hypers, h)
 
     print(len(all_hypers), all_hypers)
-    np.savez('../../data/all_hypers.npz', ss=all_hypers)
+    np.savez('../data/all_hypers.npz', ss=all_hypers)
     return all_hypers
 
 
@@ -160,7 +160,7 @@ def generate_all_codes_and_images_as_array(image_synset_file_path):
             all_ss = np.append(all_ss, code)
             all_imgs = np.append(all_imgs, img)
 
-    np.savez('../../data/imagenet2012_val_synset_codes_as_array.npz', ss=all_ss, imgs=all_imgs)
+    np.savez('../data/imagenet2012_val_synset_codes_as_array.npz', ss=all_ss, imgs=all_imgs)
     return all_ss, all_imgs
 
 
@@ -173,11 +173,11 @@ def index_and_hyponims_from_label(ss, image_synset_file_path):
     :return:
     """
     try:
-        all_labels = np.load('../../data/imagenet2012_val_synset_codes_as_array.npz')['ss']
+        all_labels = np.load('../data/imagenet2012_val_synset_codes_as_array.npz')['ss']
     except:
         all_labels = generate_all_codes_and_images_as_array(image_synset_file_path)[0]
     try:
-        dif_labels = np.load('../../data/all_ss.npz')['ss']
+        dif_labels = np.load('../data/all_ss.npz')['ss']
     except:
         dif_labels = generate_all_ss(image_synset_file_path)
     hyp = np.array(obtain_hyponims(ss))
@@ -236,7 +236,7 @@ def delete_repeated_ss(number_of_images):
     :return:
     """
     to_delete = list()
-    with open('../../data/synsets_with_same_number_of_images.txt','w') as f:
+    with open('../data/synsets_with_same_number_of_images.txt','w') as f:
         for number in number_of_images.keys():
             if len(number_of_images[number]) == 2:
                 if np.isin(get_wn_ss(number_of_images[number][0]), get_wn_ss(number_of_images[number][1]).hyponyms()):
@@ -257,7 +257,7 @@ def interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq):
     counter = 0
     ss = np.array([])
     try:
-        all_hypers = np.load('../../data/all_hypers.npz')['ss']
+        all_hypers = np.load('../data/all_hypers.npz')['ss']
     except:
         all_hypers = generate_all_hypers(image_synset_file_path)
     number_of_images = {}
@@ -304,7 +304,7 @@ def extract_interest_synsets(image_synset_file_path, min_synset_freq, max_synset
     print('We have ', counter, 'partitions of synsets')
 
 
-def main(image_synset_file_path='../../data/imagenet2012_val_synset_codes.txt', min_synset_freq=500,
+def main(image_synset_file_path='../data/imagenet2012_val_synset_codes.txt', min_synset_freq=500,
          max_synset_freq=40000):
     extract_interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq)
 
