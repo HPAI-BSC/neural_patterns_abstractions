@@ -236,14 +236,16 @@ def delete_repeated_ss(number_of_images):
     :return:
     """
     to_delete = list()
-    for number in number_of_images.keys():
-        if len(number_of_images[number]) == 2:
-            if np.isin(get_wn_ss(number_of_images[number][0]), get_wn_ss(number_of_images[number][1]).hyponyms()):
-                to_delete.append(number_of_images[number][1])
-            elif np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponyms()):
-                to_delete.append(number_of_images[number][0])
-        if len(number_of_images[number]) > 2:
-            print('Synset',number,'contains the synsets',number_of_images[number],'and a total number of images:',number)
+    with open('../data/synsets_with_same_number_of_images.txt','w') as f:
+        for number in number_of_images.keys():
+            if len(number_of_images[number]) == 2:
+                if np.isin(get_wn_ss(number_of_images[number][0]), get_wn_ss(number_of_images[number][1]).hyponyms()):
+                    to_delete.append(number_of_images[number][1])
+                elif np.isin(get_wn_ss(number_of_images[number][1]), get_wn_ss(number_of_images[number][0]).hyponyms()):
+                    to_delete.append(number_of_images[number][0])
+            if len(number_of_images[number]) > 2:
+                f.write(number_of_images[number], number)
+                f.write(str(img_ids_to_text(number_of_images[number])) ,number_of_images[number])
     return to_delete
 
 
@@ -302,7 +304,7 @@ def extract_interest_synsets(image_synset_file_path, min_synset_freq, max_synset
     print('We have ', counter, 'partitions of synsets')
 
 
-def main(image_synset_file_path='../../data/imagenet2012_val_synset_codes.txt', min_synset_freq=500,
+def main(image_synset_file_path='../data/imagenet2012_val_synset_codes.txt', min_synset_freq=500,
          max_synset_freq=40000):
     extract_interest_synsets(image_synset_file_path, min_synset_freq, max_synset_freq)
 
