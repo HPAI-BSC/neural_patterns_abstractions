@@ -24,14 +24,14 @@ file: step-1/data/imagenet2012_val_synset_codes.txt
 
 For each synset it will create two files in data: 
 
--  data/synset_partitions/name_imgs.npz
--  data/synset_partitions/name_hypernims.txt
+-  step-1/data/synset_partitions/name_imgs.npz
+-  step-1/data/synset_partitions/name_hypernims.txt
 
 
 ### Second Step
 For this step you need the files generated in step 1. It generates the necessary directory structure and files to feed the FNE extraction process.
 
-**Input**: The files generated on the step 1 of the folder data/all_synset_partitions_npz/synset/ 
+**Input**: The files generated on the step 1 of the folder step-1/data/synset_partitions/
 
 
 **Output**:The folders with the symbolic links on path_location/imgs for every one of the selected synsets. 
